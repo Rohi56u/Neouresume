@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NeuroResume</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500&display=swap');
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      width: 340px;
+      min-height: 480px;
+      background: #0a0a0f;
+      color: #f1f5f9;
+      font-family: 'DM Sans', sans-serif;
+    }
+
+    .header {
+      background: linear-gradient(135deg, rgba(124,58,237,0.15), rgba(6,182,212,0.1));
+      border-bottom: 1px solid #1e1e2e;
+      padding: 14px 16px 12px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .logo {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.1rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, #f1f5f9, #7c3aed);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .version {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.6rem;
+      color: #475569;
+      margin-left: auto;
+      letter-spacing: 0.1em;
+    }
+    .status-dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: #ef4444;
+      box-shadow: 0 0 8px #ef4444;
+      transition: all 0.3s;
+    }
+    .status-dot.connected { background: #10b981; box-shadow: 0 0 8px #10b981; }
+
+    .job-card {
+      margin: 12px;
+      background: #16161f;
+      border: 1px solid #1e1e2e;
+      border-radius: 12px;
+      padding: 14px;
+    }
+    .job-card-label {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.58rem;
+      color: #7c3aed;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      margin-bottom: 6px;
+    }
+    .job-title {
+      font-family: 'Syne', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: #f1f5f9;
+      margin-bottom: 3px;
+    }
+    .job-company { font-size: 0.8rem; color: #94a3b8; }
+    .job-meta {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin-top: 8px;
+    }
+    .meta-chip {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.6rem;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid #1e1e2e;
+      border-radius: 100px;
+      padding: 2px 8px;
+      color: #94a3b8;
+    }
+
+    .actions { padding: 0 12px 8px; }
+    .action-btn {
+      width: 100%;
+      margin-bottom: 7px;
+      padding: 10px 14px;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s;
+    }
+    .action-btn:hover { transform: translateY(-1px); }
+    .btn-primary {
+      background: linear-gradient(135deg, #7c3aed, #6d28d9);
+      color: white;
+      box-shadow: 0 3px 12px rgba(124,58,237,0.35);
+    }
+    .btn-primary:hover { box-shadow: 0 5px 18px rgba(124,58,237,0.5); }
+    .btn-secondary {
+      background: rgba(124,58,237,0.1);
+      border: 1px solid rgba(124,58,237,0.3);
+      color: #a78bfa;
+    }
+    .btn-green {
+      background: rgba(16,185,129,0.12);
+      border: 1px solid rgba(16,185,129,0.3);
+      color: #10b981;
+    }
+    .btn-cyan {
+      background: rgba(6,182,212,0.1);
+      border: 1px solid rgba(6,182,212,0.25);
+      color: #06b6d4;
+    }
+
+    .divider {
+      height: 1px;
+      background: #1e1e2e;
+      margin: 8px 12px;
+    }
+
+    .stats-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 6px;
+      padding: 0 12px 8px;
+    }
+    .stat-box {
+      background: #16161f;
+      border: 1px solid #1e1e2e;
+      border-radius: 8px;
+      padding: 8px 6px;
+      text-align: center;
+    }
+    .stat-num {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.1rem;
+      font-weight: 800;
+    }
+    .stat-lbl {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.52rem;
+      color: #475569;
+      text-transform: uppercase;
+      margin-top: 2px;
+    }
+
+    .pending-section {
+      padding: 0 12px 8px;
+    }
+    .pending-label {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.58rem;
+      color: #f59e0b;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 6px;
+    }
+    .pending-item {
+      background: rgba(245,158,11,0.06);
+      border: 1px solid rgba(245,158,11,0.2);
+      border-radius: 8px;
+      padding: 7px 10px;
+      margin-bottom: 5px;
+      font-size: 0.78rem;
+      color: #94a3b8;
+    }
+
+    .footer {
+      padding: 8px 12px 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-top: 1px solid #1e1e2e;
+    }
+    .server-status {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.6rem;
+      color: #475569;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .open-app-link {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.65rem;
+      color: #7c3aed;
+      text-decoration: none;
+      padding: 4px 10px;
+      background: rgba(124,58,237,0.1);
+      border: 1px solid rgba(124,58,237,0.3);
+      border-radius: 6px;
+    }
+
+    .no-job {
+      padding: 20px 12px;
+      text-align: center;
+      font-size: 0.82rem;
+      color: #475569;
+      line-height: 1.6;
+    }
+    .no-job-icon { font-size: 2rem; margin-bottom: 8px; }
+
+    .toast {
+      position: absolute;
+      bottom: 12px;
+      left: 12px;
+      right: 12px;
+      background: #10b981;
+      color: white;
+      padding: 8px 12px;
+      border-radius: 8px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      opacity: 0;
+      transition: opacity 0.3s;
+      text-align: center;
+    }
+    .toast.show { opacity: 1; }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <span class="status-dot" id="statusDot"></span>
+    <span class="logo">NeuroResume</span>
+    <span class="version">v1.0</span>
+  </div>
+
+  <div id="jobSection"></div>
+  <div id="statsSection"></div>
+  <div id="pendingSection"></div>
+
+  <div class="footer">
+    <div class="server-status">
+      <span id="serverStatusText">Checking server...</span>
+    </div>
+    <a href="http://localhost:8501" target="_blank" class="open-app-link">Open App →</a>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script src="popup.js"></script>
+</body>
+</html>

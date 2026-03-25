@@ -1,0 +1,54 @@
+{
+  "manifest_version": 3,
+  "name": "NeuroResume — One-Click Apply",
+  "version": "1.0.0",
+  "description": "Capture job listings and apply with AI-optimized resume from any job board. Works with LinkedIn, Naukri, Indeed, Glassdoor, Wellfound.",
+  "permissions": [
+    "activeTab",
+    "storage",
+    "notifications",
+    "contextMenus"
+  ],
+  "host_permissions": [
+    "http://localhost:8501/*",
+    "http://localhost:8502/*",
+    "https://www.linkedin.com/jobs/*",
+    "https://www.naukri.com/*",
+    "https://in.indeed.com/*",
+    "https://www.glassdoor.co.in/*",
+    "https://wellfound.com/jobs/*",
+    "https://internshala.com/*",
+    "https://unstop.com/*"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16":  "icons/icon16.png",
+      "48":  "icons/icon48.png",
+      "128": "icons/icon128.png"
+    },
+    "default_title": "NeuroResume"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "https://www.linkedin.com/jobs/*",
+        "https://www.naukri.com/*",
+        "https://in.indeed.com/*",
+        "https://www.glassdoor.co.in/*",
+        "https://wellfound.com/jobs/*",
+        "https://internshala.com/*"
+      ],
+      "js": ["content.js"],
+      "run_at": "document_idle"
+    }
+  ],
+  "icons": {
+    "16":  "icons/icon16.png",
+    "48":  "icons/icon48.png",
+    "128": "icons/icon128.png"
+  }
+}
